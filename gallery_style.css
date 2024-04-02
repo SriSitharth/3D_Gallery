@@ -1,0 +1,60 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: content-box;
+}
+
+#top_nav {
+    height: 65px;
+    background-color: rgb(255, 255, 255);
+    z-index: 100;
+}
+
+#viewer {
+    height: calc(100dvh - 65px);
+    max-width: 100vw;
+    position: relative;
+}
+
+#navbarSupportedContent {
+    background-color: rgb(255, 255, 255);
+}
+
+#models_btn button {
+    border-radius: 12px;
+    padding: 5px 24px;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+#back_btn {
+    display: block;
+    width: auto;
+    margin-right: 5%;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    padding: 5px 24px;
+}
+
+#logo {
+    margin-left: 5%;
+}
+
+#toggle_btn {
+    margin-right: 5%;
+}
+
+@media only screen and (max-width: 767px) {
+    #back_btn {
+        margin-top: 16px;
+        margin-right: 0;
+    }
+
+    #navbarSupportedContent {
+        padding: 16px;
+    }
+}

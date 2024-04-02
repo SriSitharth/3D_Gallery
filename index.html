@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QPIX - Gallery</title>
+    <link rel="icon" type="image/x-icon" href="src/favicon.png">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css"
+        type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="gallery_style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light" id="top_nav">
+            <a class="navbar-brand" id="logo" href="https://qpix.ai"><img src="src/logo.png" height="30px" alt="Logo"></a>
+
+            <button class="navbar-toggler" id="toggle_btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <div class="navbar-nav mx-auto gap-3" id="models_btn">
+                    <button class="btn btn-sm btn-info" type="button"
+                        onclick="loadModel('urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6cXBpeF9zYW1wbGVfMTIzNDUvTGlmdCUyME1hY2hpbmUlMjBSb29tLmdsdGY')">Main
+                        Model</button>
+                    <button class="btn btn-sm btn-info" type="button"
+                        onclick="loadModel('urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6cXBpeF9zYW1wbGVfMTIzNDUvUFVNUCUyMEFSRUEuZ2x0Zg')">Revit
+                        Model</button>
+                    <button class="btn btn-sm btn-info" type="button"
+                        onclick="loadModel('urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6cXBpeF9zYW1wbGVfMTIzNDUvU1BSSU5LTEVSJTIwUFVNUCUyMFJPT00uZ2x0Zg')">GLTF
+                        Model</button>
+                </div>
+
+                <a href="https://qpix.ai" class="btn btn-dark" type="button" id="back_btn">Back to QPIX</a>
+            </div>
+    </nav>
+
+    <!-- Viewer -->
+    <div id="viewer"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var viewer;
+        var options = {
+            env: 'AutodeskProduction',
+            api: 'derivativeV2',
+            getAccessToken: getForgeToken
+        };
+        var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6cXBpeF9zYW1wbGVfMTIzNDUvRU5WQUMlMjBFUVBUJTIwUk9PTS5nbHRm';
+
+        Autodesk.Viewing.Initializer(options, function onInitialized() {
+            var htmlElement = document.getElementById('viewer');
+            if (htmlElement) {
+                viewer = new Autodesk.Viewing.GuiViewer3D(htmlElement);
+                viewer.start();
+                Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+            }
+        });
+
+        function onDocumentLoadSuccess(doc) {
+            var viewable = doc.getRoot().getDefaultGeometry();
+            if (viewable) {
+                viewer.loadDocumentNode(doc, viewable).then(function (result) {
+                    console.log('Viewer loaded.');
+                }).catch(function (err) {
+                    console.log('Viewable failed to load.');
+                    console.log(err);
+                });
+            }
+        }
+
+        function onDocumentLoadFailure(viewerErrorCode) {
+            console.error('onDocumentLoadFailure() - errorCode: ' + viewerErrorCode);
+            jQuery('#viewer').html('<p>Translation in progress... Please try refreshing the page.</p>');
+        }
+
+        function getForgeToken(callback) {
+            const requestData = {
+                client_id: "pMj1ZGawdKDmwzTktKyZNTG1kkF6BrYj",
+                client_secret: "lEAjI1fMUhov7sMq",
+                grant_type: 'client_credentials',
+                scope: 'viewables:read'
+            };
+            jQuery.ajax({
+                method: 'POST',
+                url: 'https://developer.api.autodesk.com/authentication/v1/authenticate',
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                },
+                data: requestData,
+
+            }).then(function (response) {
+                callback(response.access_token, response.expires_in);
+            })
+                .catch(function (error) {
+                    callback(null, null, error);
+                });
+        }
+
+        function loadModel(documentId) {
+            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+        }
+    </script>
+</body>
+
+</html>
