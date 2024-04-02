@@ -12,6 +12,8 @@ Welcome to the repository for my 3D Model Viewer! This project is designed to cr
 
 ## Getting Started
 
+To start exploring our website, simply visit https://gallery.qpix.ai
+
 To get started with the 3D Model Viewer:
 
     Clone this repository to your local machine.
